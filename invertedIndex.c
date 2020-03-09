@@ -1,7 +1,10 @@
 #include <stdio.h>
-#include "invertedIndex.h"
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
+
+#include "invertedIndex.h"
+#include "list.h"
 
 // Removes all leading and trailing spaces
 // Assumes that tabs and newlines do not count
@@ -54,6 +57,84 @@ char *normaliseWord(char *str) {
     return str;
 }
 
+// Returns number of words in a file for calculating `tf`
+int numWords(char *filename) {
+    FILE *fp;
+    char words[1000];
+    fp = fopen(filename, "r");
+    if (fp == NULL) return 0;
+
+    int count = 0;
+    while (fscanf(fp, "%s", words) != EOF) {
+        count++;
+
+    }
+    fclose(fp);
+
+    return count;
+}
+
+// Returns the new term frequency based on the previous TF
+double getTF(float currTF, int totalWords) {
+    if (currTF == NONE) {
+        return 1.0 / totalWords;
+    } else {
+        return ((currTF * totalWords) + 1.0) / totalWords;
+    }
+}
+
 InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
+
+    // Open the collection file
+    FILE *collectionP;
+    char filename[1000];
+
+    collectionP = fopen(collectionFilename, "rb");
+
+    if (collectionP == NULL) {
+        exit(1);
+    }
+
+    // Generate the inverted index, file by file
+    while (fscanf(collectionP, "%s", filename) != EOF) {
+        // Get number of words in file so the `tf` can be calculated
+        // (2n) regardless of which order these are done, this is just simpler
+        int totalWords = numWords(filename);
+
+        // Open the file
+        FILE *fp;
+        char words[1000];
+        fp = fopen(filename, "r");
+
+        // If we can't open the file, we skip it
+        //  TODO: check if specs require special handling
+        if (fp == NULL) continue;
+
+        // Iterate through all the words in the file
+        // remove white spaces and symbols etc. using normaliseWord
+        while (fscanf(fp, "%s", words) != EOF) {
+            normaliseWord(words);
+            printf("%s ",words);
+//             TODO: add the words to a BST
+
+
+
+        }
+
+        fclose(fp);
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+    fclose(collectionP);
 
 }
