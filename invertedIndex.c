@@ -133,17 +133,6 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
 
         fclose(fp);
 
-
-
-
-
-
-
-
-
-
-
-
     }
     fclose(collectionP);
 
@@ -165,4 +154,22 @@ void printInvertedIndex(InvertedIndexBST tree) {
     }
     printf("\n");
     printInvertedIndex(tree->right);
+}
+
+// TODO: remove this later, this is only for debugging
+void printTF(InvertedIndexBST tree) {
+    if (tree == NULL) {
+        return;
+    }
+
+    printTF(tree->left);
+    printf("%s ", tree->word);
+    FileList curr = tree->fileList;
+    while (curr != NULL) {
+        printf("%s ", curr->filename);
+        printf("%lf ", curr->tf);
+        curr = curr->next;
+    }
+    printf("\n");
+    printTF(tree->right);
 }

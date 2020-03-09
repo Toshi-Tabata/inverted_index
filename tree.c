@@ -6,10 +6,10 @@
 
 // Inserts tree node in BST order
 // TODO: need to make it so that the fileList gets correctly updates
-InvertedIndexBST newTreeNode(char *word, char *filename) {
+InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
     InvertedIndexBST new = malloc(sizeof(struct InvertedIndexNode));
     new->word = word;
-    new->fileList = newListNode(filename);
+    new->fileList = newListNode(filename, totalWords);
     new->left = NULL;
     new->right = NULL;
     return new;
@@ -18,6 +18,7 @@ InvertedIndexBST newTreeNode(char *word, char *filename) {
 // Returns the new term frequency based on the previous TF
 double getTF(float currTF, int totalWords) {
     if (currTF == NONE) {
+
         return 1.0 / totalWords;
     } else {
         return ((currTF * totalWords) + 1.0) / totalWords;
@@ -27,7 +28,7 @@ double getTF(float currTF, int totalWords) {
 // TODO: pass in InvertedIndexBST instead of filelistnode
 void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
     if (root->fileList == NULL) {
-        root->fileList = newListNode(filename);
+        root->fileList = newListNode(filename, totalWords);
     }
 
     FileList curr = root->fileList;
@@ -35,16 +36,16 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
     // Find the correct node
     while (curr != NULL) {
         if (strcmp(filename, curr->filename) == 0) {
-            root->fileList->tf = getTF(root->fileList->tf, totalWords);
+            curr->tf = getTF(root->fileList->tf, totalWords);
             return;
         } else if (strcmp(filename, curr->filename) < 0) {
             // Insert a new file list node in the middle of the list
             if (prev != NULL) {
-                prev->next = newListNode(filename);
+                prev->next = newListNode(filename, totalWords);
                 prev->next->next = curr;
             } else {
                 // insert file list node at the head of the list
-                root->fileList = newListNode(filename);
+                root->fileList = newListNode(filename, totalWords);
                 root->fileList->next = curr;
 
             }
@@ -56,7 +57,7 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
 
     // add to the end of the list
     if (prev != NULL) {
-        prev->next = newListNode(filename);
+        prev->next = newListNode(filename, totalWords);
     }
 }
 
@@ -64,7 +65,7 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
 // Updates `tf` if the same word is found
 InvertedIndexBST insertTreeNode(InvertedIndexBST root, char *word, char *filename, int totalWords) {
     if (root == NULL) {
-        return newTreeNode(word, filename);
+        return newTreeNode(word, filename, totalWords);
     }
 
     // Word was smaller than the current root
