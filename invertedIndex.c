@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 #include "invertedIndex.h"
-#include "list.h"
+//#include "list.h"
+#include "tree.h"
 
 // Removes all leading and trailing spaces
 // Assumes that tabs and newlines do not count
@@ -74,16 +75,11 @@ int numWords(char *filename) {
     return count;
 }
 
-// Returns the new term frequency based on the previous TF
-double getTF(float currTF, int totalWords) {
-    if (currTF == NONE) {
-        return 1.0 / totalWords;
-    } else {
-        return ((currTF * totalWords) + 1.0) / totalWords;
-    }
-}
+
 
 InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
+    InvertedIndexBST node = NULL;
+    InvertedIndexBST root = NULL;
 
     // Open the collection file
     FILE *collectionP;
@@ -105,6 +101,8 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
         FILE *fp;
         char words[1000];
         fp = fopen(filename, "r");
+        char *currFile = malloc(sizeof(filename));
+        strcpy(currFile, filename);
 
         // If we can't open the file, we skip it
         //  TODO: check if specs require special handling
@@ -114,8 +112,20 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
         // remove white spaces and symbols etc. using normaliseWord
         while (fscanf(fp, "%s", words) != EOF) {
             normaliseWord(words);
-            printf("%s ",words);
+            char *currWord = malloc(sizeof(words));
+            strcpy(currWord, words);
+
+            if (root == NULL) {
+                root = insertTreeNode(NULL, currWord, currFile, totalWords);
+                node = root;
+            } else {
+                node = insertTreeNode(node, currWord, currFile, totalWords);
+            }
+
 //             TODO: add the words to a BST
+            // TODO: find the correct place to insert
+            //  if we find the same word on the way there, update `tf`
+            //  else if left/right == NULL, create a new node and insert
 
 
 
@@ -137,4 +147,22 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
     }
     fclose(collectionP);
 
+    return root;
+
+}
+
+void printInvertedIndex(InvertedIndexBST tree) {
+    if (tree == NULL) {
+        return;
+    }
+
+    printInvertedIndex(tree->left);
+    printf("%s ", tree->word);
+    FileList curr = tree->fileList;
+    while (curr != NULL) {
+        printf("%s ", curr->filename);
+        curr = curr->next;
+    }
+    printf("\n");
+    printInvertedIndex(tree->right);
 }

@@ -1,4 +1,6 @@
 #include "invertedIndex.h"
+#define NONE -1
 
 FileList newListNode(char *fileName);
-#define NONE -1
+void appendListNode(FileList head, char *filename);
+

@@ -13,7 +13,7 @@ FileList newListNode(char *fileName) {
 
 }
 
-void appendListNode(FileList node) {
+void appendListNode(FileList head, char *filename) {
 
 }
 
