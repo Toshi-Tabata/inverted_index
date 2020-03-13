@@ -54,6 +54,6 @@ char *normaliseWord(char *str) {
     return str;
 }
 
-InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
+TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
 
 }
