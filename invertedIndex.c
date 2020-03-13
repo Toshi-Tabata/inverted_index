@@ -15,8 +15,8 @@ void strip_spaces(char *str) {
     int length = strlen(str);
     while (str[length - 1] == ' ' || str[length - 1] == '\n' || str[length - 1] == '\t') {
         length--;
-
     }
+
     str[length] = '\0';
 
     // Get the index of the first non-whitespace character
@@ -48,6 +48,7 @@ char *normaliseWord(char *str) {
         str[length - 1] == ',' ||
         str[length - 1] == '?' ||
         str[length - 1] == ';') {
+
         str[length - 1] = '\0';
     }
 
@@ -126,7 +127,7 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
             // TODO: find the correct place to insert
             //  if we find the same word on the way there, update `tf`
             //  else if left/right == NULL, create a new node and insert
-
+            // Should be done but idk
 
 
         }
