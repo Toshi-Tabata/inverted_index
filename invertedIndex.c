@@ -5,7 +5,7 @@
 #include <math.h>
 
 #include "invertedIndex.h"
-//#include "list.h"
+#include "list.h"
 #include "tree.h"
 
 // Removes all leading and trailing spaces
@@ -175,7 +175,7 @@ void printTF(InvertedIndexBST tree) {
 }
 
 // Returns tfIdf of the given treeNode (tfIdf of the word)
-double getTfIdf(InvertedIndexBST treeNode, int D) {
+double getIdf(InvertedIndexBST treeNode, int D) {
     // Count number of files inside of the list
     FileList curr = treeNode->fileList;
     double count = 0;
@@ -183,17 +183,26 @@ double getTfIdf(InvertedIndexBST treeNode, int D) {
         count++;
         curr = curr->next;
     }
-    printf("count: %lf\n", count);
+
     return log10(D / count);
 }
 
 TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
     InvertedIndexBST treeNode = getWord(tree, searchWord);
     if (treeNode == NULL) return NULL;
-    printf("tf for %s was %lf\n", treeNode->fileList->next->filename, treeNode->fileList->next->tf);
-    printf("D was %d, and tfIdf was %lf\n", D, getTfIdf(treeNode, D));
 
+    double idf = getIdf(treeNode, D);
 
+    TfIdfList newList = NULL;
+    FileList curr = treeNode->fileList;
 
+    while (curr != NULL) {
+        printf("inserting %s\n", curr->filename);
+        newList = insertOrdered(newList, curr, idf);
+
+        curr = curr->next;
+    }
+
+    return newList;
 
 }

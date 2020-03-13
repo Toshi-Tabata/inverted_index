@@ -30,6 +30,7 @@ void printTfIdfList(char *filename, TfIdfList list){
 
     TfIdfList cur = list;
     while(cur != NULL) {
+        printf("%.6f  %s\n",  cur->tfIdfSum, cur->filename);
         fprintf(fp, "%.6f  %s\n",  cur->tfIdfSum, cur->filename );
         cur = cur->next;
     }
@@ -99,7 +100,7 @@ int main (int argc, char *argv[]) {
 //    /** Your output in "mars_TfIdfList.txt" should be
 //        same as the expected answer in "mars_TfIdfList_exp.txt"
 //    */
-//    printTfIdfList("mars_TfIdfList.txt" , list);
+    printTfIdfList("mars_TfIdfList.txt" , list);
 //
 //
 //
