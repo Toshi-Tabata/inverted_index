@@ -77,11 +77,15 @@ int main (int argc, char *argv[]) {
     */
     testNormalise();
 
+
+
+
+
     // ---------------------------------------------------------
 //
-//    InvertedIndexBST invertedTree =  generateInvertedIndex("collection.txt");
-//
-//    /** Your output in "invertedIndex.txt" should be
+    InvertedIndexBST invertedTree =  generateInvertedIndex("collection.txt");
+    TfIdfList list = calculateTfIdf(invertedTree, "notworkdd", 10);
+    //    /** Your output in "invertedIndex.txt" should be
 //        same as the expected answer in "invertedIndex_exp.txt"
 //    */
 //    printInvertedIndex(invertedTree);
