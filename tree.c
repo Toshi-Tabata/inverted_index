@@ -16,13 +16,9 @@ InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
 }
 
 // Returns the new term frequency based on the previous TF
-double getTF(float currTF, int totalWords) {
-    if (currTF == NONE) {
+double getTF(double currTF, int totalWords) {
+    return ((currTF * totalWords) + 1.0) / totalWords;
 
-        return 1.0 / totalWords;
-    } else {
-        return ((currTF * totalWords) + 1.0) / totalWords;
-    }
 }
 
 // TODO: pass in InvertedIndexBST instead of filelistnode

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "invertedIndex.h"
 //#include "list.h"
@@ -72,7 +73,6 @@ int numWords(char *filename) {
 
     }
     fclose(fp);
-
     return count;
 }
 
@@ -113,8 +113,8 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
             normaliseWord(words);
             char *currWord = malloc(sizeof(words));
             strcpy(currWord, words);
-
             if (root == NULL) {
+
                 root = insertTreeNode(NULL, currWord, currFile, totalWords);
                 node = root;
             } else {
@@ -174,9 +174,25 @@ void printTF(InvertedIndexBST tree) {
 
 }
 
+// Returns tfIdf of the given treeNode (tfIdf of the word)
+double getTfIdf(InvertedIndexBST treeNode, int D) {
+    // Count number of files inside of the list
+    FileList curr = treeNode->fileList;
+    double count = 0;
+    while (curr != NULL) {
+        count++;
+        curr = curr->next;
+    }
+    printf("count: %lf\n", count);
+    return log10(D / count);
+}
+
 TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
     InvertedIndexBST treeNode = getWord(tree, searchWord);
     if (treeNode == NULL) return NULL;
+    printf("tf for %s was %lf\n", treeNode->fileList->next->filename, treeNode->fileList->next->tf);
+    printf("D was %d, and tfIdf was %lf\n", D, getTfIdf(treeNode, D));
+
 
 
 

@@ -84,7 +84,7 @@ int main (int argc, char *argv[]) {
     // ---------------------------------------------------------
 //
     InvertedIndexBST invertedTree =  generateInvertedIndex("collection.txt");
-    TfIdfList list = calculateTfIdf(invertedTree, "notworkdd", 10);
+    TfIdfList list = calculateTfIdf(invertedTree, "sun", 7);
     //    /** Your output in "invertedIndex.txt" should be
 //        same as the expected answer in "invertedIndex_exp.txt"
 //    */
