@@ -197,12 +197,27 @@ TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
     FileList curr = treeNode->fileList;
 
     while (curr != NULL) {
-
-        newList = insertOrdered(newList, curr, idf);
+        double tfIdf = idf * curr->tf;
+        newList = insertOrdered(newList, curr, tfIdf);
 
         curr = curr->next;
     }
 
     return newList;
 
+}
+
+
+// Note: Could achieve O(n) times using a hashmap or O(nlogn) time with a tree,
+// but for simplicity sake, the insertion sort was reused from calculateTfIdf()
+TfIdfList retrieve(InvertedIndexBST tree, char *searchWords[], int D) {
+
+    // Create a new sorted list
+    TfIdfList newList = calculateTfIdf(tree, searchWords[0], D);
+
+    for (int i = 1; searchWords[i] != NULL; i++) {
+
+
+
+    }
 }

@@ -61,10 +61,10 @@ TfIdfList insertAlphabetically(TfIdfList head, TfIdfList new) {
 }
 
 // Traverse the FileList given, and insert a new node for `name` the correct place
-TfIdfList insertOrdered(TfIdfList head, FileList file, double idf) {
+TfIdfList insertOrdered(TfIdfList head, FileList file, double tfIdf) {
     TfIdfList curr = head;
     TfIdfList prev = NULL;
-    double tfIdf = idf * file->tf;
+
     TfIdfList new = newIdfList(file->filename, tfIdf);
 
     // Inserting into empty list

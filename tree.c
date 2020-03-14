@@ -4,8 +4,9 @@
 #include "invertedIndex.h"
 #include "list.h"
 
-// Inserts tree node in BST order
-// TODO: need to make it so that the fileList gets correctly updates
+
+
+
 InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
     InvertedIndexBST new = malloc(sizeof(struct InvertedIndexNode));
     new->word = word;
@@ -21,7 +22,6 @@ double getTF(double currTF, int totalWords) {
 
 }
 
-// TODO: pass in InvertedIndexBST instead of filelistnode
 void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
     if (root->fileList == NULL) {
         root->fileList = newListNode(filename, totalWords);
@@ -74,8 +74,6 @@ InvertedIndexBST insertTreeNode(InvertedIndexBST root, char *word, char *filenam
     } else if (strcmp(word, root->word) < 0) {
         root->left = insertTreeNode(root->left, word, filename, totalWords);
     } else if (strcmp(word, root->word) == 0) {
-        // TODO: navigate through the linked list, find the current file, if we reach NULL, add a new file
-        //  else, update the td
         updateFileList(root, filename, totalWords);
     }
 
@@ -98,3 +96,4 @@ InvertedIndexBST getWord(InvertedIndexBST root, char *word) {
 
 
 }
+
