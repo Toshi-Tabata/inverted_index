@@ -26,7 +26,7 @@ struct TfIdfNode {
     struct TfIdfNode *next;
 };
 typedef struct TfIdfNode *TfIdfList;
-
+void printTF(InvertedIndexBST tree);
 // Functions for Part 1
 
 /**

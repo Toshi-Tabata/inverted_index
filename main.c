@@ -80,6 +80,8 @@ int main (int argc, char *argv[]) {
     // ---------------------------------------------------------
 //
     InvertedIndexBST invertedTree =  generateInvertedIndex("collection.txt");
+    printTF(invertedTree);
+
 //    /** Your output in "invertedIndex.txt" should be
 //        same as the expected answer in "invertedIndex_exp.txt"
 //    */
