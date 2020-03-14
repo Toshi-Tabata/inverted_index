@@ -24,12 +24,18 @@ TfIdfList newIdfList(char *fileName, double tfIdfSum) {
 }
 
 TfIdfList insertAlphabetically(TfIdfList head, TfIdfList new) {
-    printf("entered insertAlphabetically\n");
+
     TfIdfList curr = head;
     TfIdfList prev = NULL;
 
     while (curr != NULL) {
-
+        if (new->tfIdfSum != curr->tfIdfSum) {
+            if (prev != NULL) {
+                prev->next = new;
+            }
+            new->next = curr;
+            return head;
+        }
 
         // Insert with ascending fileName order
         if (strcmp(new->filename, curr->filename) < 0) {

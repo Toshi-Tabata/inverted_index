@@ -197,7 +197,7 @@ TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
     FileList curr = treeNode->fileList;
 
     while (curr != NULL) {
-        printf("inserting %s\n", curr->filename);
+
         newList = insertOrdered(newList, curr, idf);
 
         curr = curr->next;
