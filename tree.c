@@ -32,15 +32,18 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
     // Find the correct node
     while (curr != NULL) {
         if (strcmp(filename, curr->filename) == 0) {
-            curr->tf = getTF(root->fileList->tf, totalWords);
+
+            curr->tf = getTF(curr->tf, totalWords); // getTF(root->fileList->tf, totalWords);
             return;
         } else if (strcmp(filename, curr->filename) < 0) {
             // Insert a new file list node in the middle of the list
             if (prev != NULL) {
+
                 prev->next = newListNode(filename, totalWords);
                 prev->next->next = curr;
             } else {
                 // insert file list node at the head of the list
+
                 root->fileList = newListNode(filename, totalWords);
                 root->fileList->next = curr;
 
@@ -53,6 +56,7 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
 
     // add to the end of the list
     if (prev != NULL) {
+
         prev->next = newListNode(filename, totalWords);
     }
 }

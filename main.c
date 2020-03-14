@@ -84,6 +84,7 @@ int main (int argc, char *argv[]) {
     // ---------------------------------------------------------
 //
     InvertedIndexBST invertedTree =  generateInvertedIndex("collection.txt");
+
 //    TfIdfList list = calculateTfIdf(invertedTree, "hello", 9);
         /** Your output in "invertedIndex.txt" should be
         same as the expected answer in "invertedIndex_exp.txt"
@@ -113,6 +114,38 @@ int main (int argc, char *argv[]) {
 
     TfIdfList list_moon = calculateTfIdf(invertedTree, "moon" , 7);
     printTfIdfList("moon_TfIdfList.txt" , list_moon );
+
+    printTF(invertedTree);
+
+//    /** Your output in "invertedIndex.txt" should be
+//        same as the expected answer in "invertedIndex_exp.txt"
+//    */
+//    printInvertedIndex(invertedTree);
+//
+//
+//    // =========   Part-2 Testing =========
+//
+//
+//    TfIdfList list = calculateTfIdf(invertedTree, "mars" , 7);
+//
+//    /** Your output in "mars_TfIdfList.txt" should be
+//        same as the expected answer in "mars_TfIdfList_exp.txt"
+//    */
+//    printTfIdfList("mars_TfIdfList.txt" , list);
+//
+//
+//
+//    TfIdfList list_sun = calculateTfIdf(invertedTree, "sun" , 7);
+//
+//    /** Your output in "sun_TfIdfList.txt" should be
+//        same as the expected answer in "sun_TfIdfList_exp.txt"
+//    */
+//    printTfIdfList("sun_TfIdfList.txt" , list_sun);
+//
+//
+//    TfIdfList list_moon = calculateTfIdf(invertedTree, "moon" , 7);
+//    printTfIdfList("moon_TfIdfList.txt" , list_moon );
+//
 
 //    // ---------------------------------------------------------
 //
