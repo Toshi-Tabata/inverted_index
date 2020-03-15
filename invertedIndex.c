@@ -198,7 +198,8 @@ TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
 
     while (curr != NULL) {
         double tfIdf = idf * curr->tf;
-        newList = insertOrdered(newList, curr, tfIdf);
+        TfIdfList new = newIdfList(curr->filename, tfIdf);
+        newList = insertOrdered(newList, new);
 
         curr = curr->next;
     }
@@ -208,16 +209,125 @@ TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
 }
 
 
-// Note: Could achieve O(n) times using a hashmap or O(nlogn) time with a tree,
-// but for simplicity sake, the insertion sort was reused from calculateTfIdf()
+struct tree {
+    TfIdfList file;
+    struct tree *left;
+    struct tree *right;
+};
+typedef struct tree *Tree;
+
+
+
+TfIdfList newList(char *fileName, double tfIdfSum) {
+    TfIdfList new = malloc(sizeof(struct TfIdfNode));
+    new->filename = fileName;
+    new->next = NULL;
+    new->tfIdfSum = tfIdfSum;
+}
+
+Tree newNode(TfIdfList file) {
+    Tree new = malloc(sizeof(struct tree));
+
+    char *newFileName = malloc(100 * sizeof(char *));
+    strcpy(newFileName, file->filename);
+
+    new->file = newList(newFileName, file->tfIdfSum);
+    new->left = NULL;
+    new->right = NULL;
+    free(file);
+    return new;
+}
+
+void updateTfIdf(TfIdfList head, TfIdfList temp) {
+    head->tfIdfSum += temp->tfIdfSum;
+    free(temp);
+}
+
+// Sorted by filename, if there is a filename repeat, update the TfIdf
+Tree insertBST(Tree root, TfIdfList file) {
+
+    if (root == NULL) {
+        return newNode(file);
+    }
+
+    // If the filename is the same as the one to be inserted, update tfidf
+    if (strcmp(file->filename, root->file->filename) == 0) {
+        updateTfIdf(root->file, file);
+
+        return root;
+    } else if (strcmp(file->filename, root->file->filename) < 0) {
+        root->left = insertBST(root->left, file);
+    } else if (strcmp(file->filename, root->file->filename) > 0) {
+        root->right = insertBST(root->right, file);
+    }
+
+    return root;
+}
+
+// Prints in infix order
+void printTree(Tree root) {
+    if (root == NULL) return;
+    printTree(root->left);
+    printf("%s ", root->file->filename);
+    printf("%lf\n", root->file->tfIdfSum);
+    printTree(root->right);
+}
+
+// Prints in infix order
+void makeSortedList(Tree root, TfIdfList *newList) {
+    if (root == NULL) return;
+    if (root->left != NULL) {
+
+        makeSortedList(root->left, newList);
+    }
+
+
+    *newList = insertOrdered(*newList, root->file);
+
+    if (root->right != NULL)
+        makeSortedList(root->right, newList);
+
+}
+
+// Note: it was stated that O(n^2) is fine for this function
 TfIdfList retrieve(InvertedIndexBST tree, char *searchWords[], int D) {
 
-    // Create a new sorted list
-    TfIdfList newList = calculateTfIdf(tree, searchWords[0], D);
+    Tree newTree = NULL;
+    for (int i = 0; searchWords[i] != NULL; i++) {
+        TfIdfList tempList = calculateTfIdf(tree, searchWords[i], D);
 
-    for (int i = 1; searchWords[i] != NULL; i++) {
+        TfIdfList curr = tempList;
+
+
+
+        while (curr != NULL) {
+
+            // Hold next since we call free(curr)
+            TfIdfList next = curr->next;
+            newTree = insertBST(newTree, curr);
+
+
+            curr = next;
+        }
 
 
 
     }
+
+    printf("=== Tree Before sorting ===\n");
+    printTree(newTree);
+    printf("=== Tree Before sorting ===\n\n");
+
+    TfIdfList sortedList = NULL;
+    makeSortedList(newTree, &sortedList);
+    return sortedList;
+//    // Print the sorted list
+//    TfIdfList curr = sortedList;
+//    while (curr != NULL) {
+//
+//        printf("%lf\t %s\n",  curr->tfIdfSum, curr->filename);
+//        curr = curr->next;
+//    }
+
+
 }
