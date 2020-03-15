@@ -34,12 +34,7 @@ InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
     return new;
 }
 
-// Returns the new term frequency based on the previous TF
-double getTF(double currTF, int totalWords) {
-    return ((currTF * totalWords) + 1.0) / totalWords;
-
-}
-
+// Creates the FileList
 void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
     if (root->fileList == NULL) {
         root->fileList = newListNode(filename, totalWords);
@@ -49,19 +44,20 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
     FileList prev = NULL;
     // Find the correct node
     while (curr != NULL) {
+
+        // If the filename already exists, update Tf instead
         if (strcmp(filename, curr->filename) == 0) {
-
-            curr->tf = getTF(curr->tf, totalWords); // getTF(root->fileList->tf, totalWords);
+            curr->tf = ((curr->tf * totalWords) + 1.0) / totalWords;
             return;
-        } else if (strcmp(filename, curr->filename) < 0) {
-            // Insert a new file list node in the middle of the list
-            if (prev != NULL) {
 
+        } else if (strcmp(filename, curr->filename) < 0) {
+            if (prev != NULL) {
+                // Insert a new file list node in the middle of the list
                 prev->next = newListNode(filename, totalWords);
                 prev->next->next = curr;
+
             } else {
                 // insert file list node at the head of the list
-
                 root->fileList = newListNode(filename, totalWords);
                 root->fileList->next = curr;
 
@@ -74,7 +70,6 @@ void updateFileList(InvertedIndexBST root, char *filename, int totalWords) {
 
     // add to the end of the list
     if (prev != NULL) {
-
         prev->next = newListNode(filename, totalWords);
     }
 }
@@ -98,6 +93,7 @@ InvertedIndexBST insertTreeNode(InvertedIndexBST root, char *word, char *filenam
     return root;
 }
 
+// Returns the node in the BST with key "word"
 InvertedIndexBST getWord(InvertedIndexBST root, char *word) {
     if (root == NULL) return NULL;
     if (strcmp(root->word, word) == 0) {
@@ -131,13 +127,14 @@ Tree newNode(TfIdfList file) {
 }
 
 // Sorted by filename, if there is a filename repeat, update the TfIdf
+// Free the TfIdfList file node for simplicity
 Tree insertBST(Tree root, TfIdfList file) {
 
     if (root == NULL) {
         return newNode(file);
     }
 
-    // If the filename is the same as the one to be inserted, update tfidf
+    // If the filename is the same as the one to be inserted, update Tfidf
     if (strcmp(file->filename, root->file->filename) == 0) {
         root->file->tfIdfSum += file->tfIdfSum;
         free(file);
@@ -153,6 +150,8 @@ Tree insertBST(Tree root, TfIdfList file) {
 }
 
 // Inserts in infix order
+// Since the tree is already in alphabetical order, insertion by TfIdfSum order
+// inserts it in TfIdfSum order first, then alphabetically second if equal sums
 void makeSortedList(Tree root, TfIdfList *newList) {
     if (root == NULL) return;
     if (root->left != NULL) makeSortedList(root->left, newList);
@@ -172,3 +171,22 @@ void printTree(Tree root) {
     printf("%lf\n", root->file->tfIdfSum);
     printTree(root->right);
 }
+
+
+
+
+
+
+//FILE *openFile(char *filename) {
+//    FILE *fp = fopen(filename, "r");
+//    // Couldn't open file
+//    if (fp == NULL) exit(1);
+//
+//    return fp;
+//}
+//
+//char *mallocString(char *str) {
+//    char *newStr = malloc(sizeof(str));
+//    strcpy(newStr, str);
+//    return newStr;
+//}
