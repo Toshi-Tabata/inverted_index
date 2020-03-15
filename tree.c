@@ -13,16 +13,13 @@ typedef struct tree *Tree;
 
 // Function prototypes for creating the inverted index BST
 InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords);
-double getTF(double currTF, int totalWords);
 void updateFileList(InvertedIndexBST root, char *filename, int totalWords);
 InvertedIndexBST insertTreeNode(InvertedIndexBST root, char *word, char *filename, int totalWords);
 InvertedIndexBST getWord(InvertedIndexBST root, char *word);
 
 // Function prototypes for creating a TfIdfList BST
 Tree newNode(TfIdfList file);
-void updateTfIdf(TfIdfList head, TfIdfList temp);
 Tree insertBST(Tree root, TfIdfList file);
-void printTree(Tree root);
 void makeSortedList(Tree root, TfIdfList *newList);
 
 InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
@@ -107,29 +104,23 @@ InvertedIndexBST getWord(InvertedIndexBST root, char *word) {
     if (strcmp(word, root->word) > 0){
         return getWord(root->right, word);
     }
-
-
 }
 
-// Functions for Tree in Part 2 of the Assignment
+////// Functions for Tree in Part 2 of the Assignment //////
 
 Tree newNode(TfIdfList file) {
     Tree new = malloc(sizeof(struct tree));
-
-//    char *newFileName = malloc(100 * sizeof(char *));
-//    strcpy(newFileName, file->filename);
-
     new->file = newIdfListNode(file->filename, file->tfIdfSum); //newFileName
     new->left = NULL;
     new->right = NULL;
     free(file);
+
     return new;
 }
 
 // Sorted by filename, if there is a filename repeat, update the TfIdf
 // Free the TfIdfList file node for simplicity
 Tree insertBST(Tree root, TfIdfList file) {
-
     if (root == NULL) {
         return newNode(file);
     }
@@ -159,34 +150,4 @@ void makeSortedList(Tree root, TfIdfList *newList) {
     *newList = insertOrdered(*newList, root->file);
 
     if (root->right != NULL) makeSortedList(root->right, newList);
-
 }
-
-// Debugging functions
-// Prints in infix order
-void printTree(Tree root) {
-    if (root == NULL) return;
-    printTree(root->left);
-    printf("%s ", root->file->filename);
-    printf("%lf\n", root->file->tfIdfSum);
-    printTree(root->right);
-}
-
-
-
-
-
-
-//FILE *openFile(char *filename) {
-//    FILE *fp = fopen(filename, "r");
-//    // Couldn't open file
-//    if (fp == NULL) exit(1);
-//
-//    return fp;
-//}
-//
-//char *mallocString(char *str) {
-//    char *newStr = malloc(sizeof(str));
-//    strcpy(newStr, str);
-//    return newStr;
-//}
