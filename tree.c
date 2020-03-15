@@ -4,8 +4,26 @@
 #include "invertedIndex.h"
 #include "list.h"
 
+struct tree {
+    TfIdfList file;
+    struct tree *left;
+    struct tree *right;
+};
+typedef struct tree *Tree;
 
+// Function prototypes for creating the inverted index BST
+InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords);
+double getTF(double currTF, int totalWords);
+void updateFileList(InvertedIndexBST root, char *filename, int totalWords);
+InvertedIndexBST insertTreeNode(InvertedIndexBST root, char *word, char *filename, int totalWords);
+InvertedIndexBST getWord(InvertedIndexBST root, char *word);
 
+// Function prototypes for creating a TfIdfList BST
+Tree newNode(TfIdfList file);
+void updateTfIdf(TfIdfList head, TfIdfList temp);
+Tree insertBST(Tree root, TfIdfList file);
+void printTree(Tree root);
+void makeSortedList(Tree root, TfIdfList *newList);
 
 InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
     InvertedIndexBST new = malloc(sizeof(struct InvertedIndexNode));
@@ -97,3 +115,60 @@ InvertedIndexBST getWord(InvertedIndexBST root, char *word) {
 
 }
 
+// Functions for Tree in Part 2 of the Assignment
+
+Tree newNode(TfIdfList file) {
+    Tree new = malloc(sizeof(struct tree));
+
+//    char *newFileName = malloc(100 * sizeof(char *));
+//    strcpy(newFileName, file->filename);
+
+    new->file = newIdfListNode(file->filename, file->tfIdfSum); //newFileName
+    new->left = NULL;
+    new->right = NULL;
+    free(file);
+    return new;
+}
+
+// Sorted by filename, if there is a filename repeat, update the TfIdf
+Tree insertBST(Tree root, TfIdfList file) {
+
+    if (root == NULL) {
+        return newNode(file);
+    }
+
+    // If the filename is the same as the one to be inserted, update tfidf
+    if (strcmp(file->filename, root->file->filename) == 0) {
+        root->file->tfIdfSum += file->tfIdfSum;
+        free(file);
+
+        return root;
+    } else if (strcmp(file->filename, root->file->filename) < 0) {
+        root->left = insertBST(root->left, file);
+    } else if (strcmp(file->filename, root->file->filename) > 0) {
+        root->right = insertBST(root->right, file);
+    }
+
+    return root;
+}
+
+// Inserts in infix order
+void makeSortedList(Tree root, TfIdfList *newList) {
+    if (root == NULL) return;
+    if (root->left != NULL) makeSortedList(root->left, newList);
+
+    *newList = insertOrdered(*newList, root->file);
+
+    if (root->right != NULL) makeSortedList(root->right, newList);
+
+}
+
+// Debugging functions
+// Prints in infix order
+void printTree(Tree root) {
+    if (root == NULL) return;
+    printTree(root->left);
+    printf("%s ", root->file->filename);
+    printf("%lf\n", root->file->tfIdfSum);
+    printTree(root->right);
+}

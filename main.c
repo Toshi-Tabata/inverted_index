@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 #include "invertedIndex.h" 
 
 
@@ -67,6 +68,34 @@ void testNormalise(){
 	checkNormalisedString("Text;", "text");
 	checkNormalisedString("abc.net.au.", "abc.net.au");
 	checkNormalisedString("Sydney???", "sydney??");
+}
+
+void freeList(TfIdfList curr) {
+
+    while (curr != NULL) {
+        TfIdfList temp = curr->next;
+//        free(curr->filename);
+        free(curr);
+        curr = temp;
+    }
+
+}
+void freeTree(InvertedIndexBST root) {
+    if (root == NULL) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root->word);
+
+    FileList curr = root->fileList;
+    while (curr != NULL) {
+        FileList temp = curr->next;
+//        free(curr->filename);
+        free(curr);
+        curr = temp;
+
+    }
+    free(root);
+
 }
 
 
@@ -140,6 +169,8 @@ int main (int argc, char *argv[]) {
 	printTfIdfList("database.txt" , listM3);
 
 
+
+
 	/**  I am not providing a free function here, because that will expose some logic
 	     required for the assignment!
 
@@ -149,6 +180,12 @@ int main (int argc, char *argv[]) {
 		 reclaimed by the OS at the termination of this program.
 	*/
 
+    freeList(list1);
+    freeList(list2);
+    freeList(listM1);
+    freeList(listM2);
+    freeList(listM3);
+    freeTree(invertedTree);
 	return 0;
 
 }
