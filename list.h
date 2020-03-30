@@ -7,3 +7,5 @@ TfIdfList insertOrdered(TfIdfList head, TfIdfList new);
 
 // Create and returns a new TfIdfList node
 TfIdfList newIdfListNode(char *fileName, double tfIdfSum);
+
+char *mallocString(char *str);

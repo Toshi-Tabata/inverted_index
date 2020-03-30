@@ -8,7 +8,7 @@ FileList newListNode(char *fileName, int totalWords);
 TfIdfList newIdfListNode(char *fileName, double tfIdfSum);
 TfIdfList insertAlphabetically(TfIdfList head, TfIdfList new);
 TfIdfList insertOrdered(TfIdfList head, TfIdfList new);
-char *mallocString(char *str);
+// char *mallocString(char *str);
 
 // Makes a copy of the given string and error checks
 char *mallocString(char *str) {

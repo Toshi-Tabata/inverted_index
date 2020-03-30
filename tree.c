@@ -21,15 +21,6 @@ InvertedIndexBST getWord(InvertedIndexBST root, char *word);
 Tree newNode(TfIdfList file);
 Tree insertBST(Tree root, TfIdfList file);
 void makeSortedList(Tree root, TfIdfList *newList);
-// Makes a copy of the given string and error checks
-char *mallocString(char *str) {
-    size_t length = strlen(str);
-    char *newStr = (char *) malloc(length + 1);
-    strcpy(newStr, str);
-    if (newStr == NULL) exit(1);
-
-    return newStr;
-}
 
 InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
     InvertedIndexBST new = malloc(sizeof(struct InvertedIndexNode));
@@ -120,6 +111,7 @@ Tree newNode(TfIdfList file) {
     new->file = newIdfListNode(file->filename, file->tfIdfSum); //newFileName
     new->left = NULL;
     new->right = NULL;
+    free(file->filename);
     free(file);
 
     return new;
@@ -135,6 +127,7 @@ Tree insertBST(Tree root, TfIdfList file) {
     // If the filename is the same as the one to be inserted, update Tfidf
     if (strcmp(file->filename, root->file->filename) == 0) {
         root->file->tfIdfSum += file->tfIdfSum;
+        free(file->filename);
         free(file);
 
         return root;
@@ -157,4 +150,5 @@ void makeSortedList(Tree root, TfIdfList *newList) {
     *newList = insertOrdered(*newList, root->file);
 
     if (root->right != NULL) makeSortedList(root->right, newList);
+    free(root);
 }

@@ -24,7 +24,7 @@
 #include "tree.h"
 
 void parseFile(char *filename, InvertedIndexBST *root);
-char *mallocString(char *str);
+// char *mallocString(char *str);
 FILE *openFile(char *filename);
 void printList(InvertedIndexBST root);
 void strip_spaces(char *str);
@@ -117,6 +117,7 @@ TfIdfList calculateTfIdf(InvertedIndexBST tree, char *searchWord, int D) {
     }
     return newList;
 }
+
 
 // Note: it was stated that O(n^2) is fine for this function
 // Returns a TfIdfList
@@ -230,15 +231,6 @@ FILE *openFile(char *filename) {
     return fp;
 }
 
-// Makes a copy of the given string and error checks
-char *mallocString(char *str) {
-    size_t length = strlen(str);
-    char *newStr = (char *) malloc(length + 1);
-    strcpy(newStr, str);
-    if (newStr == NULL) exit(1);
-
-    return newStr;
-}
 
 // Prints out the InvertedIndex node to stdout with correct formatting
 void printList(InvertedIndexBST root) {
