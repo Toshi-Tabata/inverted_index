@@ -25,6 +25,7 @@ TfIdfList newIdfListNode(char *fileName, double tfIdfSum) {
     new->filename = fileName;
     new->next = NULL;
     new->tfIdfSum = tfIdfSum;
+    return new;
 }
 
 // Insertion in an ordered list (head), sorted by descending TfIdfSum

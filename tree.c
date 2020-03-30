@@ -95,13 +95,11 @@ InvertedIndexBST getWord(InvertedIndexBST root, char *word) {
     if (root == NULL) return NULL;
     if (strcmp(root->word, word) == 0) {
         return root;
-    }
 
-    if (strcmp(word, root->word) < 0) {
+    } else if (strcmp(word, root->word) < 0) {
         return getWord(root->left, word);
-    }
 
-    if (strcmp(word, root->word) > 0){
+    } else { // (strcmp(word, root->word) > 0)
         return getWord(root->right, word);
     }
 }

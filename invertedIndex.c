@@ -23,7 +23,7 @@
 #include "list.h"
 #include "tree.h"
 
-InvertedIndexBST parseFile(char *filename, InvertedIndexBST *root);
+void parseFile(char *filename, InvertedIndexBST *root);
 char *mallocString(char *str);
 FILE *openFile(char *filename);
 void printList(InvertedIndexBST root);
@@ -200,7 +200,7 @@ int numWords(char *filename) {
 }
 
 // Normalises and gets the tf of each word in the file, then inserts it into BST
-InvertedIndexBST parseFile(char *filename, InvertedIndexBST *root) {
+void parseFile(char *filename, InvertedIndexBST *root) {
 
     // Get number of words in file so the `tf` can be calculated
     int totalWords = numWords(filename);
