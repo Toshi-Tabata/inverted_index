@@ -8,4 +8,5 @@ TfIdfList insertOrdered(TfIdfList head, TfIdfList new);
 // Create and returns a new TfIdfList node
 TfIdfList newIdfListNode(char *fileName, double tfIdfSum);
 
+// Returns a malloced copy of the given string
 char *mallocString(char *str);
