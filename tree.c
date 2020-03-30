@@ -24,7 +24,7 @@ void makeSortedList(Tree root, TfIdfList *newList);
 
 InvertedIndexBST newTreeNode(char *word, char *filename, int totalWords) {
     InvertedIndexBST new = malloc(sizeof(struct InvertedIndexNode));
-    new->word = word;
+    new->word = mallocString(word);
     new->fileList = newListNode(filename, totalWords);
     new->left = NULL;
     new->right = NULL;
@@ -111,6 +111,7 @@ Tree newNode(TfIdfList file) {
     new->file = newIdfListNode(file->filename, file->tfIdfSum); //newFileName
     new->left = NULL;
     new->right = NULL;
+    free(file->filename);
     free(file);
 
     return new;
@@ -126,6 +127,7 @@ Tree insertBST(Tree root, TfIdfList file) {
     // If the filename is the same as the one to be inserted, update Tfidf
     if (strcmp(file->filename, root->file->filename) == 0) {
         root->file->tfIdfSum += file->tfIdfSum;
+        free(file->filename);
         free(file);
 
         return root;
@@ -141,6 +143,7 @@ Tree insertBST(Tree root, TfIdfList file) {
 // Inserts in infix order
 // Since the tree is already in alphabetical order, insertion by TfIdfSum order
 // inserts it in TfIdfSum order first, then alphabetically second if equal sums
+// then frees this tree in post-fix order.
 void makeSortedList(Tree root, TfIdfList *newList) {
     if (root == NULL) return;
     if (root->left != NULL) makeSortedList(root->left, newList);
@@ -148,4 +151,5 @@ void makeSortedList(Tree root, TfIdfList *newList) {
     *newList = insertOrdered(*newList, root->file);
 
     if (root->right != NULL) makeSortedList(root->right, newList);
+    free(root);
 }
