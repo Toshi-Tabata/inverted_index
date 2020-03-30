@@ -23,12 +23,13 @@
 #include "list.h"
 #include "tree.h"
 
-void parseFile(char *filename, InvertedIndexBST *root);
-FILE *openFile(char *filename);
-void printList(InvertedIndexBST root);
 void strip_spaces(char *str);
 int numWords(char *filename);
+FILE *openFile(char *filename);
+void printList(InvertedIndexBST root, FILE *fp);
 double getIdf(InvertedIndexBST treeNode, int D);
+void parseFile(char *filename, InvertedIndexBST *root);
+void printInvertedIndexHelper(InvertedIndexBST tree, FILE *fp);
 
 // Normalises a string by altering it and removing:
 //  `.`, `,`, `;`, `?` when they are the last character of the given string
@@ -83,15 +84,15 @@ InvertedIndexBST generateInvertedIndex(char *collectionFilename) {
     return root;
 }
 
-// Prints the tree in infix order
+// Creates the invertedIndex file and calls the helper to write to it
 void printInvertedIndex(InvertedIndexBST tree) {
-    if (tree == NULL) return;
+    FILE *fp = fopen("invertedIndex.txt", "w+");
+    // Couldn't open file
+    if (fp == NULL) exit(1);
 
-    printInvertedIndex(tree->left);
+    printInvertedIndexHelper(tree, fp);
 
-    printList(tree);
-
-    printInvertedIndex(tree->right);
+    fclose(fp);
 }
 
 // Creates a TfIdfList from an existing InvertedIndexBST
@@ -225,18 +226,26 @@ FILE *openFile(char *filename) {
     return fp;
 }
 
+// Prints the tree in infix order
+void printInvertedIndexHelper(InvertedIndexBST tree, FILE *fp) {
+    if (tree == NULL) return;
+    printInvertedIndexHelper(tree->left, fp);
+    printList(tree, fp);
+    printInvertedIndexHelper(tree->right, fp);
+}
+
 // Prints out the InvertedIndex node to stdout with correct formatting
-void printList(InvertedIndexBST root) {
-    printf("%s ", root->word);
+void printList(InvertedIndexBST root, FILE *fp) {
+    fprintf(fp, "%s ", root->word);
 
     // Traverses through the fileList of a given tree node and prints it
     FileList curr = root->fileList;
     while (curr != NULL) {
-        printf("%s ", curr->filename);
+        fprintf(fp, "%s ", curr->filename);
         curr = curr->next;
     }
 
-    printf("\n");
+    fprintf(fp, "\n");
 }
 
 // Returns TfIdf of the given treeNode (TfIdf of the word)
