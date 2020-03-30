@@ -24,7 +24,6 @@
 #include "tree.h"
 
 void parseFile(char *filename, InvertedIndexBST *root);
-// char *mallocString(char *str);
 FILE *openFile(char *filename);
 void printList(InvertedIndexBST root);
 void strip_spaces(char *str);
@@ -45,8 +44,8 @@ char *normaliseWord(char *str) {
     if (str[length - 1] == '.' ||
         str[length - 1] == ',' ||
         str[length - 1] == '?' ||
-        str[length - 1] == ';') {
-
+        str[length - 1] == ';')
+    {
         str[length - 1] = '\0';
     }
 
@@ -133,7 +132,6 @@ How it works:
     decreasing TfIdfSum sorted.
  */
 TfIdfList retrieve(InvertedIndexBST tree, char *searchWords[], int D) {
-
     Tree newTree = NULL;
     for (int i = 0; searchWords[i] != NULL; i++) {
         TfIdfList tempList = calculateTfIdf(tree, searchWords[i], D);
@@ -184,7 +182,7 @@ void strip_spaces(char *str) {
 }
 
 // Returns number of words in a file for calculating `tf`
-// (2n) regardless of which order these are done, this is just simpler
+// Note: (2n) time regardless of which order these are done, this is just simpler
 int numWords(char *filename) {
     FILE *fp;
     char words[1000];
@@ -209,15 +207,11 @@ void parseFile(char *filename, InvertedIndexBST *root) {
     // Open the file
     FILE *fp = openFile(filename);
 
-
     // Iterate through all the words in the file
     char words[1000];
     while (fscanf(fp, "%s", words) != EOF) {
         normaliseWord(words);
-//        char *currFile = mallocString(filename);
-//        char *currWord = mallocString(words);
         *root = insertTreeNode(*root, words, filename, totalWords);
-
     }
     fclose(fp);
 }
@@ -230,7 +224,6 @@ FILE *openFile(char *filename) {
 
     return fp;
 }
-
 
 // Prints out the InvertedIndex node to stdout with correct formatting
 void printList(InvertedIndexBST root) {

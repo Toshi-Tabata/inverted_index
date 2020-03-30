@@ -143,6 +143,7 @@ Tree insertBST(Tree root, TfIdfList file) {
 // Inserts in infix order
 // Since the tree is already in alphabetical order, insertion by TfIdfSum order
 // inserts it in TfIdfSum order first, then alphabetically second if equal sums
+// then frees this tree in post-fix order.
 void makeSortedList(Tree root, TfIdfList *newList) {
     if (root == NULL) return;
     if (root->left != NULL) makeSortedList(root->left, newList);
