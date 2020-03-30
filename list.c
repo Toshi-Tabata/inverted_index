@@ -8,11 +8,22 @@ FileList newListNode(char *fileName, int totalWords);
 TfIdfList newIdfListNode(char *fileName, double tfIdfSum);
 TfIdfList insertAlphabetically(TfIdfList head, TfIdfList new);
 TfIdfList insertOrdered(TfIdfList head, TfIdfList new);
+char *mallocString(char *str);
+
+// Makes a copy of the given string and error checks
+char *mallocString(char *str) {
+    size_t length = strlen(str);
+    char *newStr = (char *) malloc(length + 1);
+    strcpy(newStr, str);
+    if (newStr == NULL) exit(1);
+
+    return newStr;
+}
 
 // Creates and returns a new FileList node
 FileList newListNode(char *fileName, int totalWords) {
     FileList new = malloc(sizeof(struct FileListNode));
-    new->filename = fileName;
+    new->filename = mallocString(fileName);
     new->tf = 1.0 / totalWords;
     new->next = NULL;
     return new;
@@ -22,7 +33,7 @@ FileList newListNode(char *fileName, int totalWords) {
 // Create and returns a new TfIdfList node
 TfIdfList newIdfListNode(char *fileName, double tfIdfSum) {
     TfIdfList new = malloc(sizeof(struct TfIdfNode));
-    new->filename = fileName;
+    new->filename = mallocString(fileName);
     new->next = NULL;
     new->tfIdfSum = tfIdfSum;
     return new;

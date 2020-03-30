@@ -207,14 +207,15 @@ void parseFile(char *filename, InvertedIndexBST *root) {
 
     // Open the file
     FILE *fp = openFile(filename);
-    char *currFile = mallocString(filename);
+
 
     // Iterate through all the words in the file
     char words[1000];
     while (fscanf(fp, "%s", words) != EOF) {
         normaliseWord(words);
-        char *currWord = mallocString(words);
-        *root = insertTreeNode(*root, currWord, currFile, totalWords);
+//        char *currFile = mallocString(filename);
+//        char *currWord = mallocString(words);
+        *root = insertTreeNode(*root, words, filename, totalWords);
 
     }
     fclose(fp);

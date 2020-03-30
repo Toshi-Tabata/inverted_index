@@ -86,10 +86,12 @@ void freeTree(InvertedIndexBST root) {
     freeTree(root->right);
     free(root->word);
 
+
     FileList curr = root->fileList;
     while (curr != NULL) {
         FileList temp = curr->next;
 //        free(curr->filename);
+        free(curr->filename);
         free(curr);
         curr = temp;
 
